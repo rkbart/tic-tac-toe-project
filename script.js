@@ -10,9 +10,13 @@ let playerTurn1 = true;
 let history = [];
 let historyIndex = -1; // tracks the current position in the history array
 let gameFininshed = false;
+const winnerContainer = document.getElementById("winner-container");
 
 function createBoard(){
     board.innerHTML = ""; // clear #board div
+    winnerContainer.style.visibility = "hidden";
+    winnerContainer.textContent = "";
+
     for(let i = 0; i < 9; i++){ // loop 9 times
         let tictactoeGrid = document.createElement("div"); // create grid div for cells
         tictactoeGrid.classList.add("tictactoeBox"); //give class name to grid div and CSS
@@ -64,14 +68,16 @@ function checkWinner() {
         // first gameBoard[i][0] checks if condition is true or truthy, then checks if gameBoard[0][0] is equal to other cells in the same index 
         if (gameBoard[i][0] && gameBoard[i][0] === gameBoard[i][1] && gameBoard[i][0] === gameBoard[i][2]) {
             highlightCells([`box${i * 3}`, `box${i * 3 + 1}`, `box${i * 3 + 2}`]); // Highlight row cells
-            setTimeout(() => alert(`${gameBoard[i][0]} wins!`), 10);
+            // setTimeout(() => alert(`${gameBoard[i][0]} wins!`), 10);
+            displayWinner(gameBoard[i][0]);
             showControls();
             return; // exits the function, stopping further checks since a winner has already been found
         }
         // checks if all three cells in the current column (indexed by i) are the same and not empty
         if (gameBoard[0][i] && gameBoard[0][i] === gameBoard[1][i] && gameBoard[0][i] === gameBoard[2][i]) {
             highlightCells([`box${i}`, `box${i + 3}`, `box${i + 6}`]); // Highlight column cells
-            setTimeout(() => alert(`${gameBoard[0][i]} wins!`), 10);
+            // setTimeout(() => alert(`${gameBoard[0][i]} wins!`), 10);
+            displayWinner(gameBoard[0][i]);
             showControls();
             return;
         }
@@ -80,13 +86,15 @@ function checkWinner() {
     //  checks the diagonal from the top-left corner to the bottom-right corner and not empty
     if (gameBoard[0][0] && gameBoard[0][0] === gameBoard[1][1] && gameBoard[0][0] === gameBoard[2][2]) {
         highlightCells([`box0`, `box4`, `box8`]); // Highlight diagonal cells
-        setTimeout(() => alert(`${gameBoard[0][0]} wins!`), 10);
+        // setTimeout(() => alert(`${gameBoard[0][0]} wins!`), 10);
+        displayWinner(gameBoard[0][0]);
         showControls();
         return;
     } //diagonal from the top-right corner to the bottom-left corner
     if (gameBoard[0][2] && gameBoard[0][2] === gameBoard[1][1] && gameBoard[0][2] === gameBoard[2][0]) {
         highlightCells([`box2`, `box4`, `box6`]); // Highlight diagonal cells
-        setTimeout(() => alert(`${gameBoard[0][2]} wins!`), 10);
+        // setTimeout(() => alert(`${gameBoard[0][2]} wins!`), 10);
+        displayWinner(gameBoard[0][2]);
         showControls();
         return;
     }
@@ -102,7 +110,8 @@ function checkWinner() {
     };
 
     if (allCellsFilled) { // if allCellsFilled is true or not empty
-        setTimeout(() => alert("It's a draw!"), 10);
+        // setTimeout(() => alert("It's a draw!"), 10);
+        displayWinner("It's a draw! Nobody ");
         showControls();
         };
 
@@ -209,14 +218,33 @@ playerTurn1 = (filledCount % 2 === 0) ? true : false;
 
 }
 
-// Function to prompt the player to choose who plays first (case insensitive)
+// function to prompt the player to choose who plays first (case insensitive)
 function chooseFirstPlayer() {
-    let firstPlayer = prompt("Who plays first? Enter X or O:").toUpperCase(); // Convert input to uppercase
-    while (firstPlayer !== "X" && firstPlayer !== "O") {
-        firstPlayer = prompt("Invalid input. Please enter X or O:").toUpperCase(); // Convert input to uppercase
+    let firstPlayer = prompt("Who plays first? Enter X or O:");
+
+    // If Cancel is pressed, firstPlayer will be null
+    if (firstPlayer === null) {
+        alert("You must choose X or O to start the game!");
+        location.reload(); // Refreshes the page
+    } else {
+        firstPlayer = firstPlayer.toUpperCase(); // Convert to uppercase
+
+        // Loop until valid input is given
+        while (firstPlayer !== "X" && firstPlayer !== "O") {
+            firstPlayer = prompt("Invalid input. Please enter X or O:").toUpperCase();
+        }
+        playerTurn1 = (firstPlayer === "X") ? true : false;
     }
-    playerTurn1 = firstPlayer === "X"; // Set playerTurn1 based on the choice
+
 }
 
+function displayWinner(winner) {
+    winnerContainer.style.visibility = "visible";
+    let winnerText = document.createElement("span");
+    winnerText.setAttribute = ("id","winner-text");
+    winnerText.textContent = `Player ${winner} wins!`;
+    winnerContainer.appendChild(winnerText);
+
+}
 chooseFirstPlayer();
 createBoard();
