@@ -10,7 +10,7 @@ let playerTurn1 = true;
 let history = [];
 let historyIndex = -1; // tracks the current position in the history array
 let gameFininshed = false;
-const winnerContainer = document.getElementById("winner-container");
+let winnerContainer = document.getElementById("winner-container");
 
 function createBoard(){
     board.innerHTML = ""; // clear #board div
@@ -47,18 +47,18 @@ function addMove(element, boxNumber) { // does nothing if cell is occupied
                     // gridId, index 
 function updateBoard(element, boxNumber) { // element = gridId/cell where the player just placed "X" or "O" 
 // boxNumber = the index of that cell in the game board (ranging from 0 to 8)
-let row = Math.floor(boxNumber / 3); // calculates the row number where the move was made
-let column = boxNumber % 3; // calculates the column number where the move was made
-gameBoard[row][column] = element.innerText; // assigns innerText of element (which is either "X" or "O") to the appropriate position in the gameBoard based on row and column
+    let row = Math.floor(boxNumber / 3); // calculates the row number where the move was made
+    let column = boxNumber % 3; // calculates the column number where the move was made
+    gameBoard[row][column] = element.innerText; // assigns innerText of element (which is either "X" or "O") to the appropriate position in the gameBoard based on row and column
 }
 
 let prev = document.getElementById("prev");
 let next = document.getElementById("next");
 
-function showControls(){
+function showControls(){ // displays previous and next buttons
     prev.style.display = "flex";
     next.style.display = "flex";
-    gameFininshed = true;
+    gameFininshed = true; // changes value to true
 }
 
 // Check rows, columns, and diagonals for a winner
@@ -68,15 +68,13 @@ function checkWinner() {
         // first gameBoard[i][0] checks if condition is true or truthy, then checks if gameBoard[0][0] is equal to other cells in the same index 
         if (gameBoard[i][0] && gameBoard[i][0] === gameBoard[i][1] && gameBoard[i][0] === gameBoard[i][2]) {
             highlightCells([`box${i * 3}`, `box${i * 3 + 1}`, `box${i * 3 + 2}`]); // Highlight row cells
-            // setTimeout(() => alert(`${gameBoard[i][0]} wins!`), 10);
             displayWinner(gameBoard[i][0]);
             showControls();
-            return; // exits the function, stopping further checks since a winner has already been found
+            return; 
         }
         // checks if all three cells in the current column (indexed by i) are the same and not empty
         if (gameBoard[0][i] && gameBoard[0][i] === gameBoard[1][i] && gameBoard[0][i] === gameBoard[2][i]) {
             highlightCells([`box${i}`, `box${i + 3}`, `box${i + 6}`]); // Highlight column cells
-            // setTimeout(() => alert(`${gameBoard[0][i]} wins!`), 10);
             displayWinner(gameBoard[0][i]);
             showControls();
             return;
@@ -86,14 +84,12 @@ function checkWinner() {
     //  checks the diagonal from the top-left corner to the bottom-right corner and not empty
     if (gameBoard[0][0] && gameBoard[0][0] === gameBoard[1][1] && gameBoard[0][0] === gameBoard[2][2]) {
         highlightCells([`box0`, `box4`, `box8`]); // Highlight diagonal cells
-        // setTimeout(() => alert(`${gameBoard[0][0]} wins!`), 10);
         displayWinner(gameBoard[0][0]);
         showControls();
         return;
     } //diagonal from the top-right corner to the bottom-left corner
     if (gameBoard[0][2] && gameBoard[0][2] === gameBoard[1][1] && gameBoard[0][2] === gameBoard[2][0]) {
         highlightCells([`box2`, `box4`, `box6`]); // Highlight diagonal cells
-        // setTimeout(() => alert(`${gameBoard[0][2]} wins!`), 10);
         displayWinner(gameBoard[0][2]);
         showControls();
         return;
@@ -110,7 +106,6 @@ function checkWinner() {
     };
 
     if (allCellsFilled) { // if allCellsFilled is true or not empty
-        // setTimeout(() => alert("It's a draw!"), 10);
         displayWinner("It's a draw! Nobody ");
         showControls();
         };
@@ -119,42 +114,32 @@ function checkWinner() {
 
 function highlightCells(cells) {
     cells.forEach(gridId => {
-        let cell = document.getElementById(gridId);
+        let cell = document.getElementById(gridId); 
         cell.style.backgroundColor = "#5FAD9A"; // Highlight cell directly
         cell.style.color = "#162A25";
         cell.classList.add("pulse-animation"); // Add pulsing effect
     });
 }
 
-function saveHistory() {
-    // Create a new history array up to historyIndex
+function saveHistory() { // store the elements from the existing history array up to the specified historyIndex
     const newHistory = [];
-    // store the elements from the existing history array up to the specified historyIndex
-    //           0 is less than or equal to -1 = false (do nothing)
-        //       0 is less than or equal to 0 = true then newHistory = history[0]
+    // 0 is less than or equal to -1 = false (do nothing at initial value of historyIndex)
+    // 0 is less than or equal to 0 = true then newHistory = history[0]
     for (let i = 0; i <= historyIndex; i++) { // iterate through each index of the history array that needs to be copied
         newHistory.push(history[i]); // current element of history at index i is added (or "pushed") to the newHistory array. This effectively copies all elements from history up to historyIndex
-        console.log("i = " + i);
-        console.log("new history" + newHistory);
     }
     history = newHistory; // Replace history with the new array (contains only the elements up to historyIndex)
-    console.log("history" + history);
-
+    
     // Create a copy of the gameBoard
     const boardCopy = [];
     //  iterates over each row of the gameBoard array
     for (let i = 0; i < gameBoard.length; i++) {  // loops 3 times every time because gameBoard = [0,1,2]
         boardCopy.push(gameBoard[i].slice()); // each row of gameBoard is copied using slice() and added to the boardCopy array. This creates a new row for each existing row
-        console.log("boardCopy i = " + i);
-        console.log("board copy" + boardCopy);
     }
     
     history.push(boardCopy); // add the new board state to history
     // After creating the copy of the game board, boardCopy is pushed into the history array. This saves the current state of the game board in the history
-    console.log("history" + history);
     historyIndex++; // Increment the history index (prepares the index for the next time a state is saved, indicating that the history has grown by one new entry)
-    console.log("history index = " + historyIndex);
-
 }
 
 // controls
@@ -162,7 +147,6 @@ function saveHistory() {
 document.getElementById("reset").addEventListener("click", () => {
     gameBoard = [['', '', ''], ['', '', ''], ['', '', '']]; 
     playerTurn1 = true; // 
-    // chooseFirstPlayer(); // Ask player who goes first
     history = [];
     historyIndex = -1;
     prev.style.display = "none";
@@ -171,19 +155,17 @@ document.getElementById("reset").addEventListener("click", () => {
     chooseFirstPlayer();
     createBoard();
 });
-// previous button
-document.getElementById("prev").addEventListener("click", () => { // on click
+
+prev.addEventListener("click", () => { // on click
     if (historyIndex > 0) { // if historyIndex is greater than 0 
         historyIndex--; //  decreases the value of historyIndex by 1
         gameBoard = history[historyIndex];  // updates the gameBoard to reflect the previous state stored in the history array
         renderBoard(); // runs renderBoard(), updating the visual representation of the gameBoard 
     }
 });
-// next button
-document.getElementById("next").addEventListener("click", () => {
-    console.log(`history length ${history.length}`);
-    console.log(`historyIndex ${historyIndex}`);
-            // -1 is less than 0 = true then history index++ = 0 then gameboard = history[0]
+
+next.addEventListener("click", () => {
+    // -1 is less than 0 = true then history index++ = 0 then gameboard = history[0] (does not move if the length is only 1)
     if (historyIndex < history.length - 1) { // checks if the historyIndex is less than history.length - 1
                                              // verifies whether there are more future states to navigate to
         historyIndex++; // moves one step forward in the history, allowing access to the next game state.
@@ -199,7 +181,6 @@ function renderBoard() { // displays
     
     for (let i = 0; i < boxes.length; i++) { // loops 9 times
         boxes[i].textContent = gameBoard[Math.floor(i / 3)][i % 3]; // display lahat ng content ng gameboard
-        // console.log(`boxes[index].textContent = ${boxes[index].textContent}`);
     }
    
     let filledCount = 0;
@@ -214,29 +195,29 @@ function renderBoard() { // displays
         }
     }
 playerTurn1 = (filledCount % 2 === 0) ? true : false;
-    // playerTurn1 = filledCount % 2 === 0; //  checks if filledCount is even. If even (true), it assigns true to playerTurn1, indicating that it is player one's turn. If odd, it assigns false, indicating that it’s player two's turn
+    // checks if filledCount is even. If even (true), it assigns true to playerTurn1, indicating that it is player one's turn. If odd, it assigns false, indicating that it’s player two's turn
 
 }
 
 // function to prompt the player to choose who plays first (case insensitive)
-function chooseFirstPlayer() {
-    let firstPlayer = prompt("Who plays first? Enter X or O:");
+// function chooseFirstPlayer() {
+//     let firstPlayer = prompt("Who plays first? Enter X or O:");
 
-    // If Cancel is pressed, firstPlayer will be null
-    if (firstPlayer === null) {
-        alert("You must choose X or O to start the game!");
-        location.reload(); // Refreshes the page
-    } else {
-        firstPlayer = firstPlayer.toUpperCase(); // Convert to uppercase
+//     // If Cancel is pressed, firstPlayer will be null
+//     if (firstPlayer === null) {
+//         alert("You must choose X or O to start the game!");
+//         location.reload(); // Refreshes the page
+//     } else {
+//         firstPlayer = firstPlayer.toUpperCase(); // convert to uppercase pra hindi na case sensitive
 
-        // Loop until valid input is given
-        while (firstPlayer !== "X" && firstPlayer !== "O") {
-            firstPlayer = prompt("Invalid input. Please enter X or O:").toUpperCase();
-        }
-        playerTurn1 = (firstPlayer === "X") ? true : false;
-    }
+//         // Loop until valid input is given
+//         while (firstPlayer !== "X" && firstPlayer !== "O") {
+//             firstPlayer = prompt("Invalid input. Please enter X or O:").toUpperCase();
+//         }
+//         playerTurn1 = (firstPlayer === "X") ? true : false; // if firstplayer is X (true), playerTurn 1 = true
+//     }
 
-}
+// }
 
 function displayWinner(winner) {
     winnerContainer.style.visibility = "visible";
@@ -246,5 +227,61 @@ function displayWinner(winner) {
     winnerContainer.appendChild(winnerText);
 
 }
+
+function chooseFirstPlayer() {
+    // Create modal HTML structure
+    const modal = document.createElement("div");
+    modal.id = "customPrompt";
+    modal.classList.add("modal");
+
+    const modalContent = document.createElement("div");
+    modalContent.classList.add("modal-content");
+
+    const promptText = document.createElement("p");
+    promptText.textContent = "Who plays first? Enter X or O:";
+
+    const inputField = document.createElement("input");
+    inputField.id = "firstPlayerInput";
+    inputField.type = "text";
+    inputField.placeholder = "X or O";
+
+    const confirmButton = document.createElement("button");
+    confirmButton.textContent = "Confirm";
+    confirmButton.id = "confirmButton";
+
+    const cancelButton = document.createElement("button");
+    cancelButton.textContent = "Cancel";
+    cancelButton.id = "cancelButton";
+
+    // Append the elements to modalContent
+    modalContent.appendChild(promptText);
+    modalContent.appendChild(inputField);
+    modalContent.appendChild(confirmButton);
+    modalContent.appendChild(cancelButton);
+
+    // Append modalContent to the modal
+    modal.appendChild(modalContent);
+
+    // Append modal to the body
+    document.body.appendChild(modal);
+
+        // Handle Confirm button click
+    confirmButton.addEventListener("click", function () {
+        let firstPlayer = inputField.value.toUpperCase();
+        if (firstPlayer === "X" || firstPlayer === "O") {
+            playerTurn1 = (firstPlayer === "X") ? true : false;
+            modal.style.display = "none"; // Hide modal
+        } else {
+            alert("Invalid input. Please enter X or O.");
+        }
+    });
+
+    // Handle Cancel button click
+    cancelButton.addEventListener("click", function () {
+        alert("You must choose X or O to start the game!");
+        location.reload(); // Reload the page
+    });
+}
+
 chooseFirstPlayer();
 createBoard();
