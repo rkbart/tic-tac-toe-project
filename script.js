@@ -43,10 +43,10 @@ function addMove(element, boxNumber) { // does nothing if cell is occupied
     }
 }
 
-// updates the internal representation of the game board based on the player's move. calculates the correct row and column for the box number and sets that position in the gameBoard to reflect the current player's symbol ("X" or "O").
+// updates the gameBoard array based on the player's move. 
+// calculates the correct row and column for the box number and sets that position in the gameBoard to reflect the current player's symbol ("X" or "O").
                     // gridId, index 
-function updateBoard(element, boxNumber) { // element = gridId/cell where the player just placed "X" or "O" 
-// boxNumber = the index of that cell in the game board (ranging from 0 to 8)
+function updateBoard(element, boxNumber) { 
     let row = Math.floor(boxNumber / 3); // calculates the row number where the move was made
     let column = boxNumber % 3; // calculates the column number where the move was made
     gameBoard[row][column] = element.innerText; // assigns innerText of element (which is either "X" or "O") to the appropriate position in the gameBoard based on row and column
@@ -198,26 +198,6 @@ playerTurn1 = (filledCount % 2 === 0) ? true : false;
     // checks if filledCount is even. If even (true), it assigns true to playerTurn1, indicating that it is player one's turn. If odd, it assigns false, indicating that it’s player two's turn
 
 }
-
-// function to prompt the player to choose who plays first (case insensitive)
-// function chooseFirstPlayer() {
-//     let firstPlayer = prompt("Who plays first? Enter X or O:");
-
-//     // If Cancel is pressed, firstPlayer will be null
-//     if (firstPlayer === null) {
-//         alert("You must choose X or O to start the game!");
-//         location.reload(); // Refreshes the page
-//     } else {
-//         firstPlayer = firstPlayer.toUpperCase(); // convert to uppercase pra hindi na case sensitive
-
-//         // Loop until valid input is given
-//         while (firstPlayer !== "X" && firstPlayer !== "O") {
-//             firstPlayer = prompt("Invalid input. Please enter X or O:").toUpperCase();
-//         }
-//         playerTurn1 = (firstPlayer === "X") ? true : false; // if firstplayer is X (true), playerTurn 1 = true
-//     }
-
-// }
 
 function displayWinner(winner) {
     winnerContainer.style.visibility = "visible";
