@@ -228,8 +228,8 @@ function displayWinner(winner) {
 
 }
 
-function chooseFirstPlayer() {
-    // Create modal HTML structure
+function chooseFirstPlayer() { // creates a modal where user needs to input who plays first
+    
     const modal = document.createElement("div");
     modal.id = "customPrompt";
     modal.classList.add("modal");
@@ -244,6 +244,7 @@ function chooseFirstPlayer() {
     inputField.id = "firstPlayerInput";
     inputField.type = "text";
     inputField.placeholder = "X or O";
+    inputField.autocomplete = "off";
 
     const confirmButton = document.createElement("button");
     confirmButton.textContent = "Confirm";

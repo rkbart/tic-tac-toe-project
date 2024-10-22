@@ -123,6 +123,7 @@ button:active {
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #162A25;
+            border-radius: 15px;
             width: 30%;
             text-align: center;
             font-size: 18px;
