@@ -24,7 +24,7 @@ function createBoard(){
         tictactoeGrid.setAttribute("id", gridId); // assign id = box[i] for cells inside grid
         board.appendChild(tictactoeGrid); // add grid with cells
         tictactoeGrid.addEventListener("click", () => { //on click, run function addMove
-            if (!gameFininshed){
+            if (!gameFinished){
                 addMove(gridId, i); // add id to clicked gird, run updateBoard(), saveHistory(), checkWinner() 
             }
         });
