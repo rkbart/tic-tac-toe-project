@@ -9,7 +9,7 @@ let gameBoard = [
 let playerTurn1 = true;
 let history = [];
 let historyIndex = -1; // tracks the current position in the history array
-let gameFininshed = false;
+let gameFinished = false;
 let winnerContainer = document.getElementById("winner-container");
 
 function createBoard(){
@@ -24,7 +24,7 @@ function createBoard(){
         tictactoeGrid.setAttribute("id", gridId); // assign id = box[i] for cells inside grid
         board.appendChild(tictactoeGrid); // add grid with cells
         tictactoeGrid.addEventListener("click", () => { //on click, run function addMove
-            if (!gameFininshed){
+            if (!gameFinished){
                 addMove(gridId, i); // add id to clicked gird, run updateBoard(), saveHistory(), checkWinner() 
             }
         });
@@ -58,7 +58,7 @@ let next = document.getElementById("next");
 function showControls(){ // displays previous and next buttons
     prev.style.display = "flex";
     next.style.display = "flex";
-    gameFininshed = true; // changes value to true
+    gameFinished = true; // changes value to true
 }
 
 // Check rows, columns, and diagonals for a winner
@@ -151,7 +151,7 @@ document.getElementById("reset").addEventListener("click", () => {
     historyIndex = -1;
     prev.style.display = "none";
     next.style.display = "none";
-    gameFininshed = false;
+    gameFinished = false;
     chooseFirstPlayer();
     createBoard();
 });
