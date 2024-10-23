@@ -122,24 +122,20 @@ function highlightCells(cells) {
 }
 
 function saveHistory() { // store the elements from the existing history array up to the specified historyIndex
-    const newHistory = [];
-    // 0 is less than or equal to -1 = false (do nothing at initial value of historyIndex)
-    // 0 is less than or equal to 0 = true then newHistory = history[0]
-    for (let i = 0; i <= historyIndex; i++) { // iterate through each index of the history array that needs to be copied
-        newHistory.push(history[i]); // current element of history at index i is added (or "pushed") to the newHistory array. This effectively copies all elements from history up to historyIndex
-    }
-    history = newHistory; // Replace history with the new array (contains only the elements up to historyIndex)
+    // const newHistory = []; // 
+    // // 0 is less than or equal to -1 = false (do nothing at initial value of historyIndex)
+    // for (let i = 0; i <= historyIndex; i++) { // iterate through each index of the history array that needs to be copied 
+    //     newHistory.push(history[i]); // current element of history at index i is pushed to the newHistory array. This effectively copies all elements from history up to historyIndex X
+    // }
+    // history = newHistory; // replace history with the new array (contains only the elements up to historyIndex) 
     
-    // Create a copy of the gameBoard
-    const boardCopy = [];
+    const boardCopy = [];  // creates a copy of the gameBoard
     //  iterates over each row of the gameBoard array
     for (let i = 0; i < gameBoard.length; i++) {  // loops 3 times every time because gameBoard = [0,1,2]
         boardCopy.push(gameBoard[i].slice()); // each row of gameBoard is copied using slice() and added to the boardCopy array. This creates a new row for each existing row
     }
-    
-    history.push(boardCopy); // add the new board state to history
-    // After creating the copy of the game board, boardCopy is pushed into the history array. This saves the current state of the game board in the history
-    historyIndex++; // Increment the history index (prepares the index for the next time a state is saved, indicating that the history has grown by one new entry)
+    history.push(boardCopy); // push the new board state to history. Saves the current state of the game board in the history XO
+    historyIndex++; // increment the history index
 }
 
 // controls
