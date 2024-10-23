@@ -8,6 +8,7 @@ let gameBoard = [
 
 let playerTurn1 = true;
 let history = [];
+let historyIndex = -1; // tracks the current position in the history array
 let gameFinished = false;
 let winnerContainer = document.getElementById("winner-container");
 
@@ -127,7 +128,7 @@ function saveHistory() { // store the elements from the existing history array u
         boardCopy.push(gameBoard[i].slice()); // each row of gameBoard is copied using slice() and added to the boardCopy array. This creates a new row for each existing row
     }
     history.push(boardCopy); // push the new board state to history. Saves the current state of the game board in the history XO
-   
+    historyIndex++; // increment the history index
 }
 
 // controls
